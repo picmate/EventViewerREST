@@ -82,16 +82,16 @@ public class QueryData {
 				Map<String,Object> innerMostMap = null;
 				Map<String,Object> frontMap = null;
 				
+				if(innerMostMap == null)
+					innerMostMap = new HashMap<String, Object> ();
+				
+				if(frontMap == null)
+					frontMap = innerMostMap;
+				
 				while(listIterator.hasNext()){
 					String dimName = listIterator.next();
 					
 					sb.append(","+ dimName);
-					
-					if(innerMostMap == null)
-						innerMostMap = new HashMap<String, Object> ();
-					
-					if(frontMap == null)
-						frontMap = innerMostMap;
 					
 					Map<String,Object> newMap = new HashMap<String, Object> ();
 
@@ -104,9 +104,10 @@ public class QueryData {
 
 					String qFilter = dimElement+sb.toString();
 					innerMostMap.put(dimElement, extractQueryData(qFilter));
-					queryResults.add(frontMap);
 
 				}	
+				
+				queryResults.add(frontMap);
 				
 				return;
 			}
