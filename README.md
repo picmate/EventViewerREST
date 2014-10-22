@@ -7,14 +7,34 @@ EventViewer is a scientific multi-dimensional big-data visualization tool. The p
 
 An event is some incident that has a scientific importance. For example, crime events would consist of a time of the crime, location (Zip code or the geo-location) of the crime and the type of the crime (theft, assault etc.). Each of these dimensions are hierarchical in nature. That is, a single time stamp has a day, month and a year (many other categorizations such as season, quarter etc. are also possible), a location would has an area, region and some more hierarchical categories. Similarly, a theme could be further classified into different simantically related sub-categories. There can be a multitude of event types. They can be oceanographic, geological, celestial or sociological to name a few. All such events have three dimensions: temporal, spatial and thematic.
 
+
 Services
 ---------
 
 Services are two-fold: Meta-data and Query-data
 
-The meta-data service is called first and fore-most by any API user. Meta-data service provides all the information that is relavent for building custom queries. For example, for crime data, the types of crimes, times of crimes (years, months and dates) and locations of crimes that are querible and available in the data-store is supplied to the user.
+  Meta-Data
+    
+  The meta-data service is called first and fore-most by any API user. Meta-data service provides all the information that is     relavent for building custom queries. For example, for crime data, the types of crimes, times of crimes (years, months and      dates) and locations of crimes that are querible and available in the data-store is supplied to the user.
+  
+  Calling the following url will give a sample meta-data set:
+  
+  http://eventviewer.asap.um.maine.edu:8080/evolapservice/rest/evmeta
 
-A user creates a query using the meta-data and call the Query-data API. Query-data API uses that data to filter, dice and slice the data in the data-store to provide the results back to the user. The order of the resulting objects upon calling the query API with a custom query is not considered important and therefore is not preserved. For instance, if the initial query has time, location, theme the results object could have an order such as location -> time -> theme. The order is not regarded important. A front-end application that uses the query API is supposed to be giving the user the ability to shift the dimensions and order them according to the user's preference. Which ever the way the results are ordered, it is assumed that the user is going to change the ordering when he/she interacts with the data.
+  Query-Data
+  
+  A user creates a query using the meta-data and call the Query-data API. Query-data API uses that data to filter, dice and       slice the data in the data-store to provide the results back to the user. The order of the resulting objects upon calling the   query API with a custom query is not considered important and therefore is not preserved. For instance, if the initial query    has time, location, theme the results object could have an order such as location -> time -> theme. The order is not regarded   important. A front-end application that uses the query API is supposed to be giving the user the ability to shift the           dimensions and order them according to the user's preference. Which ever the way the results are ordered, it is assumed that    the user is going to change the ordering when he/she interacts with the data.
+  
+  Following is a sample query that can be used to test the query API (in JS):
+
+  var timeArray = ["[TimeFilter].[2001]","[TimeFilter].[2002]","[TimeFilter].[2003]"]; 
+  var locArray = ["[Gulf of Maine].[Coastal].[Western Maine Shelf].[B].[1-20]"]; 
+  var themeArray = ["[Ocean].[Sigma-Tdensity].[Threshold].[Mixed125]"];
+
+  var paramArray = [locArray,timeArray,themeArray];
+
+  "http://eventviewer.asap.um.maine.edu:8080/evolapservice/rest/evquery?filter="+JSON.stringify(paramArray)
+
 
 Architectural Decisions
 -----------------------
@@ -27,25 +47,18 @@ The API consist of RESTFul services so that in the future (as envisioned) many d
 
 Java is used as the programming environment. The experties of the developers (especially me) aligned well with using Java. Also, the tremendous support that Java has for implementing RESTFul services, working with json (through libraries such as gson by google) and the convenience of collaborating with other developers (if anyother developer needs to work in the back-end) were the other factors for choosing java.
 
+
 Code and Comments
 ------------------
 
 Detaild comments (as applicable) are provided in the code.
 
-Testing the Services
----------------------
+
+Sample Front-End for Testing the Services
+-----------------------------------------
 
 A call to http://eventviewer.asap.um.maine.edu/ev2014/eventviewer/ will present the front-end of the application supported by the EventViewerREST meta-data service. A user who is unfamiliar with the environment can click on the bottom "Query" button to request sample data and visualize it in the front-end platform withuot creating any query (by dragging and dropping elements from different dimensions).
 
-Following is a sample query that can be used to test the query API (in JS):
-
-var timeArray = ["[TimeFilter].[2001]","[TimeFilter].[2002]","[TimeFilter].[2003]"]; 
-
-var locArray = ["[Gulf of Maine].[Coastal].[Western Maine Shelf].[B].[1-20]"]; var themeArray = ["[Ocean].[Sigma-Tdensity].[Threshold].[Mixed125]"];
-
-var paramArray = [locArray,timeArray,themeArray];
-
-url: "http://eventviewer.asap.um.maine.edu:8080/evolapservice/rest/evquery?filter="+JSON.stringify(paramArray)
 
 Additional Notes
 -----------------
