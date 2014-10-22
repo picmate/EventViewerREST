@@ -14,7 +14,7 @@ Services are two-fold: Meta-data and Query-data
 
 The meta-data service is called first and fore-most by any API user. Meta-data service provides all the information that is relavent for building custom queries. For example, for crime data, the types of crimes, times of crimes (years, months and dates) and locations of crimes that are querible and available in the data-store is supplied to the user.
 
-A user creates a query using the meta-data and call the Query-data API. Query-data API uses that data to filter, dice and slice the data in the data-store to provide the results back to the user.
+A user creates a query using the meta-data and call the Query-data API. Query-data API uses that data to filter, dice and slice the data in the data-store to provide the results back to the user. The order of the resulting objects upon calling the query API with a custom query is not considered important and therefore is not preserved. For instance, if the initial query has time, location, theme the results object could have an order such as location -> time -> theme. The order is not regarded important. A front-end application that uses the query API is supposed to be giving the user the ability to shift the dimensions and order them according to the user's preference. Which ever the way the results are ordered, it is assumed that the user is going to change the ordering when he/she interacts with the data.
 
 Architectural Decisions
 -----------------------
