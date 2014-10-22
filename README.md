@@ -7,6 +7,9 @@ EventViewer is a scientific multi-dimensional big-data visualization tool. The p
 
 An event is some incident that has a scientific importance. For example, crime events would consist of a time of the crime, location (Zip code or the geo-location) of the crime and the type of the crime (theft, assault etc.). Each of these dimensions are hierarchical in nature. That is, a single time stamp has a day, month and a year (many other categorizations such as season, quarter etc. are also possible), a location would has an area, region and some more hierarchical categories. Similarly, a theme could be further classified into different simantically related sub-categories. There can be a multitude of event types. They can be oceanographic, geological, celestial or sociological to name a few. All such events have three dimensions: temporal, spatial and thematic.
 
+Services
+---------
+
 Services are two-fold: Meta-data and Query-data
 
 The meta-data service is called first and fore-most by any API user. Meta-data service provides all the information that is relavent for building custom queries. For example, for crime data, the types of crimes, times of crimes (years, months and dates) and locations of crimes that are querible and available in the data-store is supplied to the user.
