@@ -1,0 +1,80 @@
+<Schema name="EventViewer" description="OLAP schema for eventviewer data mart">
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Theme" description="Event theme dimension">
+    <Hierarchy visible="true" hasAll="true" allMemberName="All Themes" primaryKey="theme_id" description="default theme hierarchy">
+      <Table name="dimtheme" schema="public">
+      </Table>
+      <Level name="Domain" visible="true" column="theme_domain" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" description="Theme domain" captionColumn="domain_label">
+      </Level>
+      <Level name="Variable" visible="true" column="theme_variable" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" description="Theme variable. Additional domain is disregarded" captionColumn="variable_label">
+      </Level>
+      <Level name="Type of Change" visible="true" column="change_type" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" description="Type of change occured" captionColumn="type_label">
+      </Level>
+      <Level name="Change Property" visible="true" column="change_property" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" captionColumn="property_label">
+      </Level>
+      <Level name="Value Type" visible="true" column="change_value_type" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" description="Change value type">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Location" description="Event location dimension">
+    <Hierarchy visible="true" hasAll="true" allMemberName="All Locations" primaryKey="location_id" description="default location hierarchy">
+      <Table name="dimlocation" schema="public">
+      </Table>
+      <Level name="CategoryI" visible="true" column="cat_1" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" description="Root of the hierarchy" captionColumn="cat_1_label">
+      </Level>
+      <Level name="CategoryII" visible="true" column="cat_2" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" description="Sub category" captionColumn="cat_2_label">
+      </Level>
+      <Level name="CategoryIII" visible="true" column="cat_3" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" description="An additional category" captionColumn="cat_3_label">
+      </Level>
+      <Level name="Location Type Value" visible="true" column="location_attribute_value" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" description="Value that defines a location" captionColumn="location_attribute">
+      </Level>
+      <Level name="Location Grain Value" visible="true" column="location_grain_value" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" description="value of the location grain" captionColumn="location_grain">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="TimeDimension" visible="true" highCardinality="false" name="Time" description="Event time dimension">
+    <Hierarchy visible="true" hasAll="true" allMemberName="All Periods" primaryKey="time_id" description="default time hierarchy">
+      <Table name="dimtime" schema="public">
+      </Table>
+      <Level name="Year" visible="true" column="the_year" type="Numeric" uniqueMembers="true" levelType="TimeYears" hideMemberIf="Never" caption="Year" description="year of an event">
+      </Level>
+      <Level name="Month" visible="true" column="month_of_year" nameColumn="the_month" type="Numeric" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never" caption="Month" description="Month of an event">
+      </Level>
+      <Level name="Day" visible="true" column="day_of_month" type="Numeric" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never" caption="Day" description="day of an event">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="TimeHour" description="A regular dimension with hours">
+    <Hierarchy visible="true" hasAll="true" allMemberName="All Periods" primaryKey="time_id" description="time by hour">
+      <Table name="dimtime" schema="public">
+      </Table>
+      <Level name="Year" visible="true" column="the_year" type="Numeric" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Month" visible="true" column="month_of_year" nameColumn="the_month" type="Numeric" uniqueMembers="true" levelType="Regular" hideMemberIf="Never" description="month event occured">
+      </Level>
+      <Level name="Day" visible="true" column="day_of_month" type="Numeric" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" description="day event occured">
+      </Level>
+      <Level name="Hour" visible="true" column="the_hour" type="Numeric" uniqueMembers="false" levelType="Regular" hideMemberIf="Never" description="hour event occured">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Events" visible="true" cache="true" enabled="true">
+    <Table name="fact_change" schema="public">
+    </Table>
+    <DimensionUsage source="Theme" name="Theme" visible="true" foreignKey="theme_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Location" name="Location" visible="true" foreignKey="location_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Time" name="StartTime" visible="true" foreignKey="start_time_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Time" name="EndTime" visible="true" foreignKey="end_time_id" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Time" name="TimeFilter" visible="true" foreignKey="start_time_id" highCardinality="false">
+    </DimensionUsage>
+    <Measure name="Change" column="change_value" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="Start_Timestamp" column="start_timestamp" datatype="String" aggregator="max" description="Time stamp value of start time" visible="true">
+    </Measure>
+    <Measure name="End_Timestamp" column="end_timestamp" datatype="String" aggregator="min" description="Time stamp value of end time" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
