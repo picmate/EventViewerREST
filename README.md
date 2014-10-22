@@ -46,3 +46,12 @@ var locArray = ["[Gulf of Maine].[Coastal].[Western Maine Shelf].[B].[1-20]"]; v
 var paramArray = [locArray,timeArray,themeArray];
 
 url: "http://eventviewer.asap.um.maine.edu:8080/evolapservice/rest/evquery?filter="+JSON.stringify(paramArray)
+
+Additional Notes
+-----------------
+
+This project is still under constant improvement. Therefore, there are places in the code that I am continously changing to make the services run faster and the code look more readable and elegent.
+
+The data that is accessible through the publicly hosted version of the project is only a sample set of the actual data-set that is hosted with minimum security.
+
+
